@@ -16,10 +16,13 @@ jobs:
     - name: Setup Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: '18.x'
+        node-version: '14.x'
 
     - name: Install dependencies
       run: npm install
+
+    - name: Run ESLint
+      run: npm run lint  # Assuming you have an npm script named "lint" that runs ESLint
 
     - name: Build React app
       run: npm run build
