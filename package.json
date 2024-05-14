@@ -35,9 +35,9 @@
     ]
   },
   "rules": {
-      "no-undef": "off", // Turn off warnings for undefined variables
-      "no-unused-vars": "off", // Turn off warnings for unused variables
-      "eqeqeq": "off" // Turn off warnings for equality comparisons
+      "no-undef": "off", 
+      "no-unused-vars": "off",
+      "eqeqeq": "off" 
     },
   "browserslist": {
     "production": [
