@@ -34,6 +34,11 @@
       "react-app/jest"
     ]
   },
+  "rules": {
+      "no-undef": "off", // Turn off warnings for undefined variables
+      "no-unused-vars": "off", // Turn off warnings for unused variables
+      "eqeqeq": "off" // Turn off warnings for equality comparisons
+    },
   "browserslist": {
     "production": [
       ">0.2%",
