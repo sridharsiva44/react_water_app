@@ -1,0 +1,49 @@
+name: Build and Push to Artifactory
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18.x'
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Build React app
+      run: npm run build
+
+    - name: List the file
+      run: ls -al build
+
+    - name: Create Tar Archive
+      run: tar -czvf builds.tar build
+
+    - name: Push to Artifactory
+      run: |
+           curl -u rs.sridharvenkat@gmail.com:cmVmdGtuOjAxOjE3NDcxMjg4MzI6dnVINk5LVHU3bHJielFiRGVqVHM2ZkFqRGpy -X PUT "https://cpss.jfrog.io/artifactory/actions/builds.tar" -T builds.tar
+
+    - name: Deploy to EC2 Instance
+      uses: appleboy/ssh-action@master
+      with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.EC2_SSH_PORT }}
+          script: |
+            echo "Logged in successfully"
+            curl -L -u rs.sridharvenkat@gmail.com:cmVmdGtuOjAxOjE3NDcxMjg4MzI6dnVINk5LVHU3bHJielFiRGVqVHM2ZkFqRGpy -O "https://cpss.jfrog.io/artifactory/actions/builds.tar"
+            tar -xzvf builds.tar
+            sudo mv builds/* /var/www/html
+            sudo chmod -R 755 /var/www/html/* 
